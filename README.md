@@ -1,2 +1,4 @@
-# theme-portafolio
-plantilla de mi portafolio
+# gulp-dev-alithemes
+
+gulp -> create Dist (puplic HTML)
+gulp serve -> Development
