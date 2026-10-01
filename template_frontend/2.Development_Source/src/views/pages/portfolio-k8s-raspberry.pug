@@ -1,0 +1,25 @@
+extends ../layouts/master.pug
+block variables
+  - var CatTitle = 'Portafolio'
+  - var PageTitle = 'Clúster Kubernetes híbrido'
+block title
+  title Clúster Kubernetes híbrido · Raspberry Pi + WireGuard | Alain Maza
+
+block basicSeo
+  meta(name='description' content='Caso de estudio: clúster Kubernetes on-premise con control plane en Raspberry Pi 5 (ARM64), workers RHEL en VMware (x86_64), red overlay WireGuard y CNI Calico.')
+  meta(name='keywords', content='kubernetes, raspberry pi, wireguard, calico, kubeadm, on-premise, homelab, devops')
+  meta(name='author' content='Alain Maza')
+
+block header
+  include ../components/header-small.pug
+
+block content
+  .cover-home3
+    .container
+      .row
+        .col-xl-1
+        .col-xl-10.col-lg-12
+          include ../elements/breadcrumb.pug
+          include ../sections/portfolio/k8s-raspberry-cluster.pug
+
+  block scripts-custom

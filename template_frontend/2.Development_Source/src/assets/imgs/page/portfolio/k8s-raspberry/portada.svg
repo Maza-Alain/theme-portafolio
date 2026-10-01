@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" font-family="'Noto Sans', Arial, sans-serif">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0F172A"/>
+      <stop offset="1" stop-color="#0B1222"/>
+    </linearGradient>
+    <linearGradient id="brand" x1="0" x2="1">
+      <stop offset="0" stop-color="#0EA5EA"/>
+      <stop offset="1" stop-color="#1CC2E7"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#0EA5EA" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#0EA5EA" stop-opacity="0"/>
+    </radialGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0 L0 0 0 40" fill="none" stroke="#222F43" stroke-width="1" opacity="0.5"/>
+    </pattern>
+  </defs>
+  <rect width="1600" height="900" fill="url(#bg)"/>
+  <rect width="1600" height="900" fill="url(#grid)"/>
+
+  <!-- title -->
+  <text x="100" y="170" fill="#1CC2E7" font-size="22" font-weight="700" letter-spacing="4">HOMELAB · KUBERNETES ON-PREM</text>
+  <text x="100" y="250" fill="#E6F0FF" font-size="64" font-weight="800">Clúster híbrido</text>
+  <text x="100" y="326" fill="url(#brand)" font-size="64" font-weight="800">ARM64 + x86_64</text>
+  <text x="100" y="384" fill="#94A9C9" font-size="26">Raspberry Pi 5 · VMware · WireGuard · Calico</text>
+
+  <!-- nodes -->
+  <circle cx="1060" cy="560" r="230" fill="url(#glow)"/>
+  <g stroke="url(#brand)" stroke-width="6" stroke-linecap="round" opacity="0.9">
+    <line x1="1060" y1="560" x2="1360" y2="400"/>
+    <line x1="1060" y1="560" x2="1380" y2="700"/>
+  </g>
+  <g stroke="#1CC2E7" stroke-width="2" stroke-dasharray="3 10" opacity="0.6">
+    <line x1="1360" y1="400" x2="1380" y2="700"/>
+  </g>
+
+  <g>
+    <circle cx="1060" cy="560" r="110" fill="#131C31" stroke="#1CC2E7" stroke-width="4"/>
+    <text x="1060" y="550" fill="#E6F0FF" font-size="30" font-weight="800" text-anchor="middle">Pi 5</text>
+    <text x="1060" y="584" fill="#94A9C9" font-size="18" text-anchor="middle">control plane</text>
+  </g>
+  <g>
+    <circle cx="1360" cy="400" r="78" fill="#131C31" stroke="#222F43" stroke-width="4"/>
+    <text x="1360" y="396" fill="#E6F0FF" font-size="22" font-weight="700" text-anchor="middle">RHEL</text>
+    <text x="1360" y="422" fill="#94A9C9" font-size="16" text-anchor="middle">worker</text>
+  </g>
+  <g>
+    <circle cx="1380" cy="700" r="78" fill="#131C31" stroke="#222F43" stroke-width="4" stroke-dasharray="10 8"/>
+    <text x="1380" y="696" fill="#E6F0FF" font-size="22" font-weight="700" text-anchor="middle">RHEL</text>
+    <text x="1380" y="722" fill="#94A9C9" font-size="16" text-anchor="middle">worker-n</text>
+  </g>
+
+  <!-- cidr chips -->
+  <g font-family="monospace" font-size="20">
+    <rect x="100" y="470" width="300" height="52" rx="26" fill="#1CC2E7" fill-opacity="0.12" stroke="#1CC2E7" stroke-width="1.5"/>
+    <text x="250" y="503" fill="#1CC2E7" text-anchor="middle">wg  10.8.0.0/24</text>
+    <rect x="100" y="540" width="300" height="52" rx="26" fill="#6CFFC1" fill-opacity="0.10" stroke="#6CFFC1" stroke-width="1.5"/>
+    <text x="250" y="573" fill="#6CFFC1" text-anchor="middle">pods  10.244.0.0/16</text>
+    <rect x="100" y="610" width="300" height="52" rx="26" fill="#FF6BC4" fill-opacity="0.10" stroke="#FF6BC4" stroke-width="1.5"/>
+    <text x="250" y="643" fill="#FF6BC4" text-anchor="middle">svc  10.96.0.0/12</text>
+  </g>
+</svg>

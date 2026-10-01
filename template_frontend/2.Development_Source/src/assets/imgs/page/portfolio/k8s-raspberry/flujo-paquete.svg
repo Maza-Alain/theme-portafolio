@@ -1,0 +1,77 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" font-family="'Noto Sans', Arial, sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 Z" fill="#66768F"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="520" rx="24" fill="#0B1222"/>
+
+  <!-- group labels -->
+  <g font-size="11" letter-spacing="1.5" fill="#66768F" text-anchor="middle">
+    <text x="245" y="40">NODO ORIGEN · worker-1</text>
+    <text x="600" y="40">UNDERLAY</text>
+    <text x="955" y="40">NODO DESTINO · master</text>
+  </g>
+  <line x1="40" y1="50" x2="450" y2="50" stroke="#222F43" stroke-width="2"/>
+  <line x1="530" y1="50" x2="670" y2="50" stroke="#222F43" stroke-width="2"/>
+  <line x1="750" y1="50" x2="1160" y2="50" stroke="#222F43" stroke-width="2"/>
+
+  <!-- flow nodes: width 130, gap 31 -->
+  <g text-anchor="middle">
+    <rect x="40" y="66" width="130" height="76" rx="12" fill="#131C31" stroke="#FF6BC4" stroke-width="1.5"/>
+    <text x="105" y="98" fill="#E6F0FF" font-size="14" font-weight="700">Pod A</text>
+    <text x="105" y="120" fill="#94A9C9" font-size="12" font-family="monospace">10.244.x.a</text>
+
+    <rect x="180" y="66" width="130" height="76" rx="12" fill="#131C31" stroke="#6CFFC1" stroke-width="1.5"/>
+    <text x="245" y="98" fill="#E6F0FF" font-size="14" font-weight="700">calico-node</text>
+    <text x="245" y="120" fill="#94A9C9" font-size="12">encapsula VXLAN</text>
+
+    <rect x="320" y="66" width="130" height="76" rx="12" fill="#131C31" stroke="#1CC2E7" stroke-width="1.5"/>
+    <text x="385" y="98" fill="#E6F0FF" font-size="14" font-weight="700">wg0</text>
+    <text x="385" y="120" fill="#94A9C9" font-size="12">cifra</text>
+
+    <rect x="535" y="66" width="130" height="76" rx="12" fill="#131C31" stroke="#FFB067" stroke-width="1.5"/>
+    <text x="600" y="98" fill="#E6F0FF" font-size="14" font-weight="700">LAN Wi-Fi</text>
+    <text x="600" y="120" fill="#94A9C9" font-size="12">UDP 51820</text>
+
+    <rect x="750" y="66" width="130" height="76" rx="12" fill="#131C31" stroke="#1CC2E7" stroke-width="1.5"/>
+    <text x="815" y="98" fill="#E6F0FF" font-size="14" font-weight="700">wg0</text>
+    <text x="815" y="120" fill="#94A9C9" font-size="12">descifra</text>
+
+    <rect x="890" y="66" width="130" height="76" rx="12" fill="#131C31" stroke="#6CFFC1" stroke-width="1.5"/>
+    <text x="955" y="98" fill="#E6F0FF" font-size="14" font-weight="700">calico-node</text>
+    <text x="955" y="120" fill="#94A9C9" font-size="12">desencapsula</text>
+
+    <rect x="1030" y="66" width="130" height="76" rx="12" fill="#131C31" stroke="#FF6BC4" stroke-width="1.5"/>
+    <text x="1095" y="98" fill="#E6F0FF" font-size="14" font-weight="700">Pod B</text>
+    <text x="1095" y="120" fill="#94A9C9" font-size="12" font-family="monospace">10.244.y.b</text>
+  </g>
+  <g stroke="#66768F" stroke-width="1.8" marker-end="url(#arr)">
+    <line x1="170" y1="104" x2="179" y2="104"/>
+    <line x1="310" y1="104" x2="319" y2="104"/>
+    <line x1="450" y1="104" x2="534" y2="104"/>
+    <line x1="665" y1="104" x2="749" y2="104"/>
+    <line x1="880" y1="104" x2="889" y2="104"/>
+    <line x1="1020" y1="104" x2="1029" y2="104"/>
+  </g>
+
+  <!-- encapsulation -->
+  <text x="40" y="196" fill="#E6F0FF" font-size="16" font-weight="700">Anatomía del paquete en el cable</text>
+  <text x="40" y="218" fill="#7F92B0" font-size="13">El pod sólo ve IPs de pods; cada capa externa la agrega y la quita la infraestructura.</text>
+
+  <rect x="40" y="236" width="1120" height="256" rx="16" fill="#FFB067" fill-opacity="0.06" stroke="#FFB067" stroke-opacity="0.7" stroke-width="1.5"/>
+  <text x="64" y="262" fill="#FFB067" font-size="13" font-weight="700">IP LAN</text>
+  <text x="130" y="262" fill="#94A9C9" font-size="12" font-family="monospace">192.168.100.x → 192.168.100.y</text>
+
+  <rect x="64" y="276" width="1072" height="200" rx="14" fill="#1CC2E7" fill-opacity="0.06" stroke="#1CC2E7" stroke-opacity="0.7" stroke-width="1.5"/>
+  <text x="88" y="302" fill="#1CC2E7" font-size="13" font-weight="700">WireGuard · cifrado</text>
+  <text x="240" y="302" fill="#94A9C9" font-size="12" font-family="monospace">10.8.0.2 → 10.8.0.1</text>
+
+  <rect x="88" y="316" width="1024" height="144" rx="12" fill="#6CFFC1" fill-opacity="0.06" stroke="#6CFFC1" stroke-opacity="0.7" stroke-width="1.5"/>
+  <text x="112" y="342" fill="#6CFFC1" font-size="13" font-weight="700">VXLAN · Calico</text>
+  <text x="230" y="342" fill="#94A9C9" font-size="12">túnel entre calico-nodes</text>
+
+  <rect x="112" y="356" width="976" height="88" rx="10" fill="#FF6BC4" fill-opacity="0.08" stroke="#FF6BC4" stroke-opacity="0.8" stroke-width="1.5"/>
+  <text x="600" y="394" fill="#E6F0FF" font-size="15" font-weight="700" text-anchor="middle">Paquete original del pod</text>
+  <text x="600" y="420" fill="#FF6BC4" font-size="13" text-anchor="middle" font-family="monospace">10.244.x.a → 10.244.y.b · payload de la aplicación</text>
+</svg>

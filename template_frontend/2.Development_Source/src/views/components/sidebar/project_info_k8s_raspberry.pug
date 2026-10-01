@@ -1,0 +1,40 @@
+.box-sidebar.bg-gray-850.border-gray-800
+    .head-sidebar.wow.animate__animated.animate__fadeIn
+        h5.line-bottom Información del proyecto
+    .content-sidebar
+        .list-comments
+            .item-comment.border-gray-800.wow.animate__animated.animate__fadeIn
+                p.color-gray-200.mb-10.text-uppercase Categoría
+                p.color-gray-500 Infraestructura · Kubernetes on-premise
+            .item-comment.border-gray-800.wow.animate__animated.animate__fadeIn
+                p.color-gray-200.mb-10.text-uppercase Tipo
+                p.color-gray-500 Laboratorio personal (homelab)
+            .item-comment.border-gray-800.wow.animate__animated.animate__fadeIn
+                p.color-gray-200.mb-10.text-uppercase Mi rol
+                p.color-gray-500 Diseño, implementación y operación de punta a punta
+            .item-comment.border-gray-800.wow.animate__animated.animate__fadeIn
+                p.color-gray-200.mb-10.text-uppercase Estado
+                p.color-gray-500 Activo · con una segunda versión en Hetzner Cloud
+
+.box-sidebar.bg-gray-850.border-gray-800
+    .head-sidebar.wow.animate__animated.animate__fadeIn
+        h5.line-bottom Stack
+    .content-sidebar
+        .cs-chips.pt-10.wow.animate__animated.animate__fadeIn
+            each t in ['Kubernetes v1.30', 'kubeadm', 'containerd', 'Calico', 'VXLAN', 'WireGuard', 'NetworkManager', 'firewalld', 'AlmaLinux 9', 'RHEL', 'VMware', 'metrics-server']
+                span.color-gray-500.border-gray-800= t
+
+.box-sidebar.bg-gray-850.border-gray-800
+    .head-sidebar.wow.animate__animated.animate__fadeIn
+        h5.line-bottom Hardware
+    .content-sidebar
+        .list-comments
+            .item-comment.border-gray-800.wow.animate__animated.animate__fadeIn
+                p.color-gray-200.mb-10.text-uppercase Control plane
+                p.color-gray-500 Raspberry Pi 5 · SSD externo · disipador pasivo
+            .item-comment.border-gray-800.wow.animate__animated.animate__fadeIn
+                p.color-gray-200.mb-10.text-uppercase Energía
+                p.color-gray-500 UPS HAT X1200 con baterías 18650
+            .item-comment.border-gray-800.wow.animate__animated.animate__fadeIn
+                p.color-gray-200.mb-10.text-uppercase Workers
+                p.color-gray-500 VMs RHEL sobre VMware
