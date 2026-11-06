@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 650" font-family="'Noto Sans','Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+  <rect width="1200" height="650" rx="16" fill="#131C31"/>
+
+  <text x="40" y="52" font-size="26" font-weight="700" fill="#FFFFFF">Cuatro redes, cero traslapes</text>
+  <text x="40" y="80" font-size="16" fill="#94A9C9">Cada capa vive en su propio rango de IPs; el primer fallo serio vino de un traslape entre Calico y la LAN</text>
+
+  <!-- Services -->
+  <rect x="40" y="104" width="760" height="118" rx="12" fill="#0F172A" stroke="#222F43"/>
+  <rect x="40" y="104" width="6" height="118" fill="#A78BFA"/>
+  <text x="70" y="140" font-size="20" font-weight="700" fill="#FFFFFF">Red de Services</text>
+  <text x="70" y="170" font-size="22" fill="#A78BFA" font-family="'JetBrains Mono','Fira Code',Menlo,Consolas,monospace">10.96.0.0/12</text>
+  <text x="70" y="200" font-size="14" fill="#94A9C9">IPs virtuales (ClusterIP)</text>
+  <g font-size="14" fill="#C9DAF5">
+    <text x="420" y="142">kube-proxy las traduce con iptables</text>
+    <text x="420" y="168">En workers: ruta 10.96.0.0/12 vía wg0 → 10.8.0.1</text>
+    <text x="420" y="194">Persistida con NetworkManager (nmcli)</text>
+  </g>
+
+  <!-- Pods -->
+  <rect x="40" y="236" width="760" height="118" rx="12" fill="#0F172A" stroke="#222F43"/>
+  <rect x="40" y="236" width="6" height="118" fill="#0BD1D1"/>
+  <text x="70" y="272" font-size="20" font-weight="700" fill="#FFFFFF">Red de Pods</text>
+  <text x="70" y="302" font-size="22" fill="#0BD1D1" font-family="'JetBrains Mono','Fira Code',Menlo,Consolas,monospace">10.244.0.0/16</text>
+  <text x="70" y="332" font-size="14" fill="#94A9C9">Una IP única por pod (Calico)</text>
+  <g font-size="14" fill="#C9DAF5">
+    <text x="420" y="274">IPPool propio en VXLAN, bloques /26 por nodo</text>
+    <text x="420" y="300">Pod ↔ pod sin NAT, aunque estén en otro nodo</text>
+    <text x="420" y="326">natOutgoing para salir a internet</text>
+  </g>
+
+  <!-- WireGuard -->
+  <rect x="40" y="368" width="760" height="118" rx="12" fill="#0F172A" stroke="#222F43"/>
+  <rect x="40" y="368" width="6" height="118" fill="#1AAEED"/>
+  <text x="70" y="404" font-size="20" font-weight="700" fill="#FFFFFF">Overlay WireGuard</text>
+  <text x="70" y="434" font-size="22" fill="#1AAEED" font-family="'JetBrains Mono','Fira Code',Menlo,Consolas,monospace">10.8.0.0/24</text>
+  <text x="70" y="464" font-size="14" fill="#94A9C9">InternalIP de cada nodo</text>
+  <g font-size="14" fill="#C9DAF5">
+    <text x="420" y="406">El API server (:6443) escucha solo aquí</text>
+    <text x="420" y="432">kubelet registrado con --node-ip=10.8.0.x</text>
+    <text x="420" y="458">wg0 en la zona trusted de firewalld</text>
+  </g>
+
+  <!-- Underlay -->
+  <rect x="40" y="500" width="760" height="118" rx="12" fill="#0F172A" stroke="#222F43"/>
+  <rect x="40" y="500" width="6" height="118" fill="#94A9C9"/>
+  <text x="70" y="536" font-size="20" font-weight="700" fill="#FFFFFF">Underlay física</text>
+  <text x="70" y="566" font-size="22" fill="#94A9C9" font-family="'JetBrains Mono','Fira Code',Menlo,Consolas,monospace">192.168.100.0/24</text>
+  <text x="70" y="596" font-size="14" fill="#94A9C9">Wi‑Fi doméstico</text>
+  <g font-size="14" fill="#C9DAF5">
+    <text x="420" y="538">Transporta UDP 51820 cifrado y el SSH</text>
+    <text x="420" y="564">de administración</text>
+    <text x="420" y="590">nmcli: IP fija, gateway, DNS y autoconnect</text>
+  </g>
+
+  <!-- Panel traslape -->
+  <rect x="830" y="104" width="330" height="514" rx="12" fill="#0F172A" stroke="#222F43"/>
+  <rect x="830" y="104" width="330" height="6" fill="#F59E0B"/>
+  <text x="852" y="146" font-size="18" font-weight="700" fill="#FFFFFF">El traslape que resolví</text>
+
+  <text x="852" y="186" font-size="13" font-weight="700" fill="#F59E0B" letter-spacing="1">ANTES</text>
+  <text x="852" y="212" font-size="14" fill="#94A9C9">IPPool por defecto de Calico</text>
+  <text x="852" y="240" font-size="20" fill="#F59E0B" font-family="'JetBrains Mono','Fira Code',Menlo,Consolas,monospace">192.168.0.0/16</text>
+  <rect x="852" y="254" width="286" height="26" rx="4" fill="#F59E0B" fill-opacity="0.18" stroke="#F59E0B"/>
+  <rect x="963" y="254" width="12" height="26" fill="#F87171"/>
+  <path d="M969 284 V296" stroke="#F87171"/>
+  <text x="852" y="314" font-size="13" fill="#F87171">contiene a la LAN 192.168.100.0/24</text>
+  <text x="852" y="336" font-size="13" fill="#94A9C9">→ rutas ambiguas entre pods y hosts</text>
+
+  <text x="852" y="388" font-size="13" font-weight="700" fill="#34D399" letter-spacing="1">DESPUÉS</text>
+  <text x="852" y="414" font-size="14" fill="#94A9C9">IPPool nuevo, fuera de 192.168.x</text>
+  <text x="852" y="442" font-size="18" fill="#34D399" font-family="'JetBrains Mono','Fira Code',Menlo,Consolas,monospace">10.244.0.0/16 · VXLAN</text>
+  <g font-size="13" fill="#C9DAF5">
+    <text x="852" y="478">· Deshabilité el pool por defecto</text>
+    <text x="852" y="502">· Alineé el clusterCIDR de kube-proxy</text>
+    <text x="852" y="526">· Rollout de calico-node</text>
+  </g>
+  <text x="852" y="570" font-size="13" fill="#FFFFFF">Igual al --pod-network-cidr</text>
+  <text x="852" y="592" font-size="13" fill="#FFFFFF">usado en kubeadm init</text>
+</svg>

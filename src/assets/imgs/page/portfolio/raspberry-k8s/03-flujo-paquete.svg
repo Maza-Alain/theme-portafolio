@@ -1,0 +1,74 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 620" font-family="'Noto Sans','Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M0 0 L10 5 L0 10 z" fill="#C9DAF5"/>
+    </marker>
+  </defs>
+  <rect width="1200" height="620" rx="16" fill="#131C31"/>
+
+  <text x="40" y="52" font-size="26" font-weight="700" fill="#FFFFFF">Cómo viaja un paquete de pod a pod</text>
+  <text x="40" y="80" font-size="16" fill="#94A9C9">Dos encapsulamientos: VXLAN de Calico dentro del túnel cifrado de WireGuard</text>
+
+  <!-- Nodo origen -->
+  <rect x="40" y="104" width="440" height="190" rx="14" fill="#0F172A" stroke="#222F43"/>
+  <text x="60" y="134" font-size="17" font-weight="700" fill="#FFFFFF">Raspberry Pi · 10.8.0.1</text>
+  <!-- Nodo destino -->
+  <rect x="720" y="104" width="440" height="190" rx="14" fill="#0F172A" stroke="#222F43"/>
+  <text x="740" y="134" font-size="17" font-weight="700" fill="#FFFFFF">worker-1 · 10.8.0.2</text>
+
+  <g text-anchor="middle">
+    <rect x="60" y="160" width="120" height="70" rx="10" fill="#131C31" stroke="#C9DAF5"/>
+    <text x="120" y="190" font-size="16" font-weight="700" fill="#FFFFFF">Pod A</text>
+    <text x="120" y="212" font-size="13" fill="#94A9C9">10.244.a.x</text>
+
+    <rect x="200" y="160" width="120" height="70" rx="10" fill="#131C31" stroke="#0BD1D1"/>
+    <text x="260" y="190" font-size="16" font-weight="700" fill="#0BD1D1">VXLAN</text>
+    <text x="260" y="212" font-size="13" fill="#94A9C9">encapsula</text>
+
+    <rect x="340" y="160" width="120" height="70" rx="10" fill="#131C31" stroke="#1AAEED"/>
+    <text x="400" y="190" font-size="16" font-weight="700" fill="#1AAEED">wg0</text>
+    <text x="400" y="212" font-size="13" fill="#94A9C9">cifra</text>
+
+    <rect x="740" y="160" width="120" height="70" rx="10" fill="#131C31" stroke="#1AAEED"/>
+    <text x="800" y="190" font-size="16" font-weight="700" fill="#1AAEED">wg0</text>
+    <text x="800" y="212" font-size="13" fill="#94A9C9">descifra</text>
+
+    <rect x="880" y="160" width="120" height="70" rx="10" fill="#131C31" stroke="#0BD1D1"/>
+    <text x="940" y="190" font-size="16" font-weight="700" fill="#0BD1D1">VXLAN</text>
+    <text x="940" y="212" font-size="13" fill="#94A9C9">desencapsula</text>
+
+    <rect x="1020" y="160" width="120" height="70" rx="10" fill="#131C31" stroke="#C9DAF5"/>
+    <text x="1080" y="190" font-size="16" font-weight="700" fill="#FFFFFF">Pod B</text>
+    <text x="1080" y="212" font-size="13" fill="#94A9C9">10.244.b.y</text>
+  </g>
+
+  <g stroke="#C9DAF5" stroke-width="1.5" marker-end="url(#arr)">
+    <line x1="180" y1="195" x2="198" y2="195"/>
+    <line x1="320" y1="195" x2="338" y2="195"/>
+    <line x1="860" y1="195" x2="878" y2="195"/>
+    <line x1="1000" y1="195" x2="1018" y2="195"/>
+  </g>
+  <line x1="460" y1="195" x2="738" y2="195" stroke="#66768F" stroke-width="2" stroke-dasharray="7 6" marker-end="url(#arr)"/>
+  <text x="600" y="182" font-size="14" fill="#C9DAF5" text-anchor="middle">Wi‑Fi / LAN</text>
+  <text x="600" y="220" font-size="13" fill="#94A9C9" text-anchor="middle">solo UDP cifrado</text>
+
+  <text x="60" y="270" font-size="13" fill="#66768F">calico-node elige la ruta hacia el nodo destino</text>
+  <text x="740" y="270" font-size="13" fill="#66768F">La respuesta recorre el mismo camino a la inversa</text>
+
+  <!-- Anatomía -->
+  <text x="40" y="340" font-size="18" font-weight="700" fill="#FFFFFF">Anatomía del paquete en el cable</text>
+
+  <rect x="40" y="356" width="1120" height="190" rx="12" fill="none" stroke="#94A9C9"/>
+  <text x="60" y="380" font-size="14" fill="#94A9C9">Underlay · IP 192.168.100.a → 192.168.100.b · UDP 51820</text>
+
+  <rect x="60" y="394" width="1080" height="136" rx="10" fill="#0EA5EA" fill-opacity="0.10" stroke="#1AAEED"/>
+  <text x="80" y="418" font-size="14" fill="#1AAEED">WireGuard (cifrado) · IP 10.8.0.1 → 10.8.0.2</text>
+
+  <rect x="80" y="432" width="1040" height="82" rx="8" fill="#0BD1D1" fill-opacity="0.10" stroke="#0BD1D1"/>
+  <text x="100" y="455" font-size="14" fill="#0BD1D1">VXLAN de Calico · UDP 4789</text>
+
+  <rect x="100" y="466" width="1000" height="36" rx="6" fill="#0F172A" stroke="#C9DAF5"/>
+  <text x="600" y="489" font-size="14" fill="#FFFFFF" text-anchor="middle">IP 10.244.a.x → 10.244.b.y · datos de la aplicación</text>
+
+  <text x="40" y="584" font-size="14" fill="#94A9C9">En la LAN solo se ve UDP cifrado del puerto 51820; las IPs de nodos y pods viajan ocultas dentro del túnel.</text>
+</svg>

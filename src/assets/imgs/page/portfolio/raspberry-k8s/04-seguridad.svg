@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680" font-family="'Noto Sans','Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0EA5EA"/>
+      <stop offset="1" stop-color="#0BD1D1"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="680" rx="16" fill="#131C31"/>
+
+  <text x="40" y="52" font-size="26" font-weight="700" fill="#FFFFFF">Seguridad por capas</text>
+  <text x="40" y="80" font-size="16" fill="#94A9C9">Qué expone cada nodo y qué atajos tomé conscientemente para el laboratorio</text>
+
+  <!-- Acceso -->
+  <rect x="40" y="104" width="720" height="150" rx="12" fill="#0F172A" stroke="#222F43"/>
+  <rect x="40" y="104" width="6" height="150" fill="url(#g)"/>
+  <text x="66" y="136" font-size="13" font-weight="700" fill="#1AAEED" letter-spacing="1">1 · ACCESO</text>
+  <g font-size="15" fill="#C9DAF5">
+    <text x="66" y="168">SSH solo con llave ed25519 (PubkeyAuthentication yes)</text>
+    <text x="66" y="196">PermitRootLogin prohibit-password: root nunca entra con contraseña</text>
+    <text x="66" y="224">Sin pantalla ni teclado: administración 100% remota</text>
+  </g>
+
+  <!-- Perímetro -->
+  <rect x="40" y="268" width="720" height="196" rx="12" fill="#0F172A" stroke="#222F43"/>
+  <rect x="40" y="268" width="6" height="196" fill="url(#g)"/>
+  <text x="66" y="300" font-size="13" font-weight="700" fill="#1AAEED" letter-spacing="1">2 · PERÍMETRO (FIREWALLD)</text>
+  <g font-size="13" fill="#66768F" font-weight="700" letter-spacing="0.5">
+    <text x="66" y="332">ZONA</text>
+    <text x="200" y="332">RASPBERRY (MASTER)</text>
+    <text x="480" y="332">WORKER</text>
+  </g>
+  <line x1="66" y1="342" x2="740" y2="342" stroke="#222F43"/>
+  <g font-size="15" font-family="'JetBrains Mono','Fira Code',Menlo,Consolas,monospace">
+    <text x="66" y="370" fill="#FFFFFF">public</text>
+    <text x="200" y="370" fill="#C9DAF5">22/tcp 51820/udp 6443/tcp</text>
+    <text x="480" y="370" fill="#C9DAF5">ssh 51820/udp 10250/tcp</text>
+    <text x="66" y="404" fill="#FFFFFF">trusted</text>
+    <text x="200" y="404" fill="#1AAEED">wg0</text>
+    <text x="480" y="404" fill="#1AAEED">wg0</text>
+  </g>
+  <line x1="66" y1="380" x2="740" y2="380" stroke="#222F43"/>
+  <text x="66" y="442" font-size="13" fill="#94A9C9">wg0 va en trusted: todo lo que llega por el túnel ya pasó la autenticación por llave pública de WireGuard</text>
+
+  <!-- Plano de control -->
+  <rect x="40" y="478" width="720" height="166" rx="12" fill="#0F172A" stroke="#222F43"/>
+  <rect x="40" y="478" width="6" height="166" fill="url(#g)"/>
+  <text x="66" y="510" font-size="13" font-weight="700" fill="#1AAEED" letter-spacing="1">3 · PLANO DE CONTROL</text>
+  <g font-size="15" fill="#C9DAF5">
+    <text x="66" y="542">kube-apiserver con --bind-address=10.8.0.1: el 6443 solo responde en el túnel</text>
+    <text x="66" y="570">Nodos registrados con su IP de WireGuard (--node-ip)</text>
+    <text x="66" y="598">Un par de llaves por nodo; cada peer limitado a su IP con AllowedIPs</text>
+    <text x="66" y="626">RBAC y autorización Node activos en el API server</text>
+  </g>
+
+  <!-- Trade-offs -->
+  <rect x="790" y="104" width="370" height="540" rx="12" fill="#0F172A" stroke="#222F43"/>
+  <rect x="790" y="104" width="370" height="6" fill="#F59E0B"/>
+  <text x="812" y="144" font-size="18" font-weight="700" fill="#FFFFFF">Atajos conscientes</text>
+  <text x="812" y="166" font-size="13" fill="#F59E0B">Válidos en mi lab, no en producción</text>
+
+  <g font-size="13" fill="#94A9C9">
+    <text x="812" y="208" font-size="15" font-weight="700" fill="#FFFFFF">Todo como root</text>
+    <text x="812" y="230">En producción: usuarios sin privilegios</text>
+    <text x="812" y="248">y sudo con mínimo privilegio</text>
+
+    <text x="812" y="296" font-size="15" font-weight="700" fill="#FFFFFF">SELinux en permissive</text>
+    <text x="812" y="318">En producción: enforcing con políticas</text>
+    <text x="812" y="336">para el runtime de contenedores</text>
+
+    <text x="812" y="384" font-size="15" font-weight="700" fill="#FFFFFF">Pods en el control plane</text>
+    <text x="812" y="406">Quité el taint para aprovechar la Pi;</text>
+    <text x="812" y="424">se revierte con un solo comando</text>
+
+    <text x="812" y="472" font-size="15" font-weight="700" fill="#FFFFFF">--kubelet-insecure-tls</text>
+    <text x="812" y="494">En metrics-server. En producción:</text>
+    <text x="812" y="512">certificados de kubelet firmados por la CA</text>
+
+    <text x="812" y="560" font-size="15" font-weight="700" fill="#FFFFFF">VPN sobre la misma LAN</text>
+    <text x="812" y="582">Hoy es redundante; deja lista la base</text>
+    <text x="812" y="600">para sumar nodos en otras redes</text>
+  </g>
+</svg>

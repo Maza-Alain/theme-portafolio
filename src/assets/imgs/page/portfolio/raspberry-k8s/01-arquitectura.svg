@@ -1,0 +1,112 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 740" font-family="'Noto Sans','Segoe UI',Roboto,Helvetica,Arial,sans-serif">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#0EA5EA"/>
+      <stop offset="1" stop-color="#0BD1D1"/>
+    </linearGradient>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#94A9C9"/>
+    </marker>
+  </defs>
+
+  <rect width="1200" height="740" rx="16" fill="#131C31"/>
+
+  <text x="40" y="52" font-size="26" font-weight="700" fill="#FFFFFF">Arquitectura del clúster</text>
+  <text x="40" y="80" font-size="16" fill="#94A9C9">Control plane en ARM, workers x86 en VMware, unidos por un túnel WireGuard</text>
+
+  <!-- LAN -->
+  <rect x="30" y="105" width="1140" height="565" rx="14" fill="none" stroke="#66768F" stroke-dasharray="6 6"/>
+  <text x="50" y="134" font-size="15" fill="#94A9C9">LAN doméstica · underlay 192.168.100.0/24</text>
+
+  <rect x="520" y="115" width="160" height="40" rx="8" fill="#0F172A" stroke="#66768F"/>
+  <text x="600" y="141" font-size="15" fill="#C9DAF5" text-anchor="middle">Router / gateway</text>
+  <path d="M600 155 V168 H270 V180 M600 168 H930 V180" fill="none" stroke="#66768F" stroke-dasharray="6 6"/>
+  <text x="285" y="161" font-size="13" fill="#66768F">Wi‑Fi · IP estática</text>
+
+  <!-- Raspberry -->
+  <rect x="60" y="180" width="420" height="380" rx="14" fill="#0F172A" stroke="url(#g)" stroke-width="2"/>
+  <text x="80" y="214" font-size="20" font-weight="700" fill="#FFFFFF">Raspberry Pi 5 · master</text>
+  <text x="80" y="238" font-size="14" fill="#94A9C9">AlmaLinux 9 · ARM64 · control plane + workloads</text>
+
+  <g font-size="15" fill="#C9DAF5" text-anchor="middle">
+    <rect x="80" y="258" width="185" height="40" rx="8" fill="#131C31" stroke="#1AAEED"/>
+    <text x="172" y="283">kube-apiserver</text>
+    <rect x="275" y="258" width="185" height="40" rx="8" fill="#131C31" stroke="#222F43"/>
+    <text x="367" y="283">etcd</text>
+    <rect x="80" y="308" width="185" height="40" rx="8" fill="#131C31" stroke="#222F43"/>
+    <text x="172" y="333">scheduler</text>
+    <rect x="275" y="308" width="185" height="40" rx="8" fill="#131C31" stroke="#222F43"/>
+    <text x="367" y="333">controller-manager</text>
+    <rect x="80" y="358" width="185" height="40" rx="8" fill="#131C31" stroke="#222F43"/>
+    <text x="172" y="383">kubelet</text>
+    <rect x="275" y="358" width="185" height="40" rx="8" fill="#131C31" stroke="#222F43"/>
+    <text x="367" y="383">containerd</text>
+    <rect x="80" y="408" width="185" height="40" rx="8" fill="#131C31" stroke="#222F43"/>
+    <text x="172" y="433">calico-node</text>
+    <rect x="275" y="408" width="185" height="40" rx="8" fill="#131C31" stroke="#222F43"/>
+    <text x="367" y="433">metrics-server</text>
+  </g>
+
+  <g font-size="13" fill="#94A9C9" text-anchor="middle">
+    <rect x="80" y="466" width="122" height="30" rx="15" fill="none" stroke="#66768F"/>
+    <text x="141" y="486">UPS HAT X1200</text>
+    <rect x="209" y="466" width="122" height="30" rx="15" fill="none" stroke="#66768F"/>
+    <text x="270" y="486">SSD externo</text>
+    <rect x="338" y="466" width="122" height="30" rx="15" fill="none" stroke="#66768F"/>
+    <text x="399" y="486">Disipador</text>
+  </g>
+
+  <rect x="80" y="512" width="380" height="32" rx="8" fill="#0EA5EA" fill-opacity="0.15" stroke="#1AAEED"/>
+  <text x="270" y="533" font-size="14" fill="#FFFFFF" text-anchor="middle">wg0 · 10.8.0.1 · API :6443 solo en la VPN</text>
+
+  <!-- Túnel -->
+  <text x="600" y="332" font-size="13" fill="#94A9C9" text-anchor="middle">cifrado ChaCha20-Poly1305</text>
+  <rect x="480" y="345" width="240" height="52" rx="26" fill="#0EA5EA" fill-opacity="0.18" stroke="url(#g)" stroke-width="2"/>
+  <text x="600" y="367" font-size="15" font-weight="700" fill="#FFFFFF" text-anchor="middle">Túnel WireGuard</text>
+  <text x="600" y="387" font-size="13" fill="#C9DAF5" text-anchor="middle">UDP 51820 · 10.8.0.0/24</text>
+  <text x="600" y="424" font-size="13" fill="#94A9C9" text-anchor="middle">API, kubelet y tráfico de pods</text>
+  <text x="600" y="442" font-size="13" fill="#94A9C9" text-anchor="middle">viajan dentro del túnel</text>
+
+  <!-- VMware -->
+  <rect x="720" y="180" width="420" height="380" rx="14" fill="#0F172A" stroke="#222F43" stroke-width="2"/>
+  <text x="740" y="214" font-size="20" font-weight="700" fill="#FFFFFF">Host VMware</text>
+  <text x="740" y="238" font-size="14" fill="#94A9C9">Workers como VMs Red Hat (x86_64)</text>
+
+  <rect x="740" y="256" width="380" height="172" rx="10" fill="#131C31" stroke="#222F43"/>
+  <text x="760" y="284" font-size="17" font-weight="700" fill="#FFFFFF">worker-1 · RHEL</text>
+  <g font-size="15" fill="#C9DAF5" text-anchor="middle">
+    <rect x="760" y="298" width="166" height="36" rx="8" fill="#0F172A" stroke="#222F43"/>
+    <text x="843" y="321">kubelet</text>
+    <rect x="934" y="298" width="166" height="36" rx="8" fill="#0F172A" stroke="#222F43"/>
+    <text x="1017" y="321">containerd</text>
+    <rect x="760" y="342" width="166" height="36" rx="8" fill="#0F172A" stroke="#222F43"/>
+    <text x="843" y="365">calico-node</text>
+    <rect x="934" y="342" width="166" height="36" rx="8" fill="#0F172A" stroke="#222F43"/>
+    <text x="1017" y="365">kube-proxy</text>
+  </g>
+  <rect x="760" y="390" width="340" height="28" rx="8" fill="#0EA5EA" fill-opacity="0.15" stroke="#1AAEED"/>
+  <text x="930" y="409" font-size="13" fill="#FFFFFF" text-anchor="middle">wg0 · 10.8.0.2 · kubelet :10250</text>
+
+  <rect x="740" y="442" width="380" height="102" rx="10" fill="none" stroke="#66768F" stroke-dasharray="5 5"/>
+  <text x="760" y="474" font-size="17" font-weight="700" fill="#94A9C9">worker-N · RHEL</text>
+  <text x="760" y="500" font-size="14" fill="#66768F">Se suma con kubeadm join + un peer WireGuard</text>
+  <text x="760" y="524" font-size="14" fill="#66768F">wg0 · 10.8.0.x</text>
+
+  <!-- Admin -->
+  <rect x="420" y="592" width="360" height="58" rx="10" fill="#0F172A" stroke="#222F43"/>
+  <text x="600" y="617" font-size="16" font-weight="700" fill="#FFFFFF" text-anchor="middle">Estación de trabajo</text>
+  <text x="600" y="638" font-size="13" fill="#94A9C9" text-anchor="middle">SSH con llave ed25519 · kubectl</text>
+  <path d="M420 621 H270 V564" fill="none" stroke="#94A9C9" stroke-width="1.5" marker-end="url(#arr)"/>
+
+  <!-- Leyenda -->
+  <g font-size="13" fill="#94A9C9">
+    <rect x="40" y="700" width="40" height="4" rx="2" fill="url(#g)"/>
+    <text x="90" y="707">Tráfico cifrado (WireGuard)</text>
+    <line x1="300" y1="702" x2="340" y2="702" stroke="#66768F" stroke-dasharray="6 6" stroke-width="1.5"/>
+    <text x="350" y="707">Red física / LAN</text>
+    <line x1="500" y1="702" x2="540" y2="702" stroke="#94A9C9" stroke-width="1.5" marker-end="url(#arr)"/>
+    <text x="552" y="707">Administración remota</text>
+    <rect x="740" y="694" width="16" height="16" rx="4" fill="none" stroke="#1AAEED"/>
+    <text x="764" y="707">Expuesto solo en la interfaz wg0</text>
+  </g>
+</svg>
