@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 520" font-family="'Noto Sans', Arial, sans-serif">
+  <rect width="1200" height="520" rx="24" fill="#0B1222"/>
+
+  <g font-size="11" fill="#66768F" letter-spacing="1.5">
+    <text x="72" y="34">CAPA · RANGO</text>
+    <text x="480" y="34">QUÉ DIRECCIONA</text>
+    <text x="880" y="34">QUIÉN LA GESTIONA</text>
+  </g>
+
+  <!-- Row template: y, color -->
+  <g>
+    <rect x="40" y="48" width="1120" height="96" rx="14" fill="#131C31" stroke="#222F43" stroke-width="1.5"/>
+    <rect x="40" y="48" width="8" height="96" rx="4" fill="#FF6BC4"/>
+    <text x="72" y="88" fill="#E6F0FF" font-size="19" font-weight="700">Services</text>
+    <text x="72" y="116" fill="#FF6BC4" font-size="15" font-family="monospace">10.96.0.0/12</text>
+    <text x="480" y="92" fill="#C9DAF5" font-size="15">IPs virtuales estables (ClusterIP)</text>
+    <text x="480" y="114" fill="#7F92B0" font-size="13">No existen en ninguna interfaz</text>
+    <text x="880" y="92" fill="#C9DAF5" font-size="15">kube-proxy</text>
+    <text x="880" y="114" fill="#7F92B0" font-size="13">Reglas iptables en cada nodo</text>
+  </g>
+
+  <g>
+    <rect x="40" y="160" width="1120" height="96" rx="14" fill="#131C31" stroke="#222F43" stroke-width="1.5"/>
+    <rect x="40" y="160" width="8" height="96" rx="4" fill="#6CFFC1"/>
+    <text x="72" y="200" fill="#E6F0FF" font-size="19" font-weight="700">Red de pods</text>
+    <text x="72" y="228" fill="#6CFFC1" font-size="15" font-family="monospace">10.244.0.0/16</text>
+    <text x="480" y="204" fill="#C9DAF5" font-size="15">Una IP única por pod, sin NAT</text>
+    <text x="480" y="226" fill="#7F92B0" font-size="13">Encapsulada en VXLAN entre nodos</text>
+    <text x="880" y="204" fill="#C9DAF5" font-size="15">Calico (CNI)</text>
+    <text x="880" y="226" fill="#7F92B0" font-size="13">IPPool propio, bloques /26 por nodo</text>
+  </g>
+
+  <g>
+    <rect x="40" y="272" width="1120" height="96" rx="14" fill="#131C31" stroke="#222F43" stroke-width="1.5"/>
+    <rect x="40" y="272" width="8" height="96" rx="4" fill="#1CC2E7"/>
+    <text x="72" y="312" fill="#E6F0FF" font-size="19" font-weight="700">Overlay WireGuard</text>
+    <text x="72" y="340" fill="#1CC2E7" font-size="15" font-family="monospace">10.8.0.0/24</text>
+    <text x="480" y="316" fill="#C9DAF5" font-size="15">InternalIP de cada nodo</text>
+    <text x="480" y="338" fill="#7F92B0" font-size="13">API server, kubelet y tráfico entre nodos</text>
+    <text x="880" y="316" fill="#C9DAF5" font-size="15">wg0 + NetworkManager</text>
+    <text x="880" y="338" fill="#7F92B0" font-size="13">Llaves por nodo, rutas persistentes</text>
+  </g>
+
+  <g>
+    <rect x="40" y="384" width="1120" height="96" rx="14" fill="#131C31" stroke="#222F43" stroke-width="1.5"/>
+    <rect x="40" y="384" width="8" height="96" rx="4" fill="#FFB067"/>
+    <text x="72" y="424" fill="#E6F0FF" font-size="19" font-weight="700">Underlay físico</text>
+    <text x="72" y="452" fill="#FFB067" font-size="15" font-family="monospace">192.168.100.0/24</text>
+    <text x="480" y="428" fill="#C9DAF5" font-size="15">Interfaces físicas de los hosts</text>
+    <text x="480" y="450" fill="#7F92B0" font-size="13">IP estática por nodo</text>
+    <text x="880" y="428" fill="#C9DAF5" font-size="15">Router doméstico</text>
+    <text x="880" y="450" fill="#7F92B0" font-size="13">nmcli / NetworkManager</text>
+  </g>
+
+  <!-- abstraction axis -->
+  <text x="1160" y="505" fill="#66768F" font-size="12" text-anchor="end">Rangos sin solapamiento · de lo lógico (arriba) a lo físico (abajo)</text>
+</svg>

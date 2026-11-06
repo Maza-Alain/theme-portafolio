@@ -1,0 +1,83 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600" font-family="'Noto Sans', Arial, sans-serif">
+  <defs>
+    <linearGradient id="tunnel" x1="0" x2="1" y1="0" y2="0">
+      <stop offset="0" stop-color="#0EA5EA"/>
+      <stop offset="1" stop-color="#1CC2E7"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="600" rx="24" fill="#0B1222"/>
+  <g transform="translate(0,-80)">
+
+    <!-- Raspberry Pi -->
+    <rect x="40" y="120" width="420" height="380" rx="18" fill="#131C31" stroke="#222F43" stroke-width="2"/>
+    <text x="64" y="160" fill="#E6F0FF" font-size="20" font-weight="700">Raspberry Pi 5</text>
+    <text x="64" y="184" fill="#94A9C9" font-size="14">Control plane · AlmaLinux 9 · ARM64</text>
+
+    <rect x="64" y="208" width="372" height="40" rx="10" fill="#0F172A" stroke="#0EA5EA" stroke-width="1.5"/>
+    <text x="80" y="233" fill="#E6F0FF" font-size="14" font-weight="600">kube-apiserver</text>
+    <text x="420" y="233" fill="#1CC2E7" font-size="13" text-anchor="end" font-family="monospace">10.8.0.1:6443</text>
+
+    <g font-size="13" fill="#C9DAF5" text-anchor="middle">
+      <rect x="64" y="262" width="117" height="38" rx="10" fill="#0F172A" stroke="#222F43" stroke-width="1.5"/>
+      <text x="122.5" y="286">etcd</text>
+      <rect x="191.5" y="262" width="117" height="38" rx="10" fill="#0F172A" stroke="#222F43" stroke-width="1.5"/>
+      <text x="250" y="286">scheduler</text>
+      <rect x="319" y="262" width="117" height="38" rx="10" fill="#0F172A" stroke="#222F43" stroke-width="1.5"/>
+      <text x="377.5" y="286">controller-mgr</text>
+
+      <rect x="64" y="312" width="181" height="38" rx="10" fill="#0F172A" stroke="#222F43" stroke-width="1.5"/>
+      <text x="154.5" y="336">containerd</text>
+      <rect x="255" y="312" width="181" height="38" rx="10" fill="#0F172A" stroke="#222F43" stroke-width="1.5"/>
+      <text x="345.5" y="336">calico-node</text>
+    </g>
+
+    <rect x="306" y="360" width="130" height="34" rx="17" fill="#0EA5EA" fill-opacity="0.18" stroke="#1CC2E7" stroke-width="1.5"/>
+    <text x="371" y="382" fill="#1CC2E7" font-size="13" font-weight="700" text-anchor="middle">wg0 · 10.8.0.1</text>
+
+    <rect x="64" y="412" width="372" height="38" rx="10" fill="none" stroke="#FFB067" stroke-width="1.5" stroke-dasharray="6 5"/>
+    <text x="250" y="436" fill="#FFB067" font-size="13" text-anchor="middle">Pods de aplicación (taint de control-plane removido)</text>
+
+    <text x="64" y="480" fill="#66768F" font-size="12">UPS HAT X1200 · SSD externo · disipador pasivo</text>
+
+    <!-- VMware -->
+    <rect x="740" y="120" width="420" height="380" rx="18" fill="#131C31" stroke="#222F43" stroke-width="2"/>
+    <text x="764" y="160" fill="#E6F0FF" font-size="20" font-weight="700">VMware</text>
+    <text x="764" y="184" fill="#94A9C9" font-size="14">Worker nodes · RHEL · x86_64</text>
+
+    <rect x="764" y="204" width="372" height="212" rx="14" fill="#0B1222" stroke="#222F43" stroke-width="1.5"/>
+    <text x="784" y="234" fill="#E6F0FF" font-size="16" font-weight="700">worker-1</text>
+    <text x="1116" y="234" fill="#1CC2E7" font-size="12" text-anchor="end" font-family="monospace">InternalIP 10.8.0.2</text>
+    <g font-size="13" fill="#C9DAF5" text-anchor="middle">
+      <rect x="784" y="252" width="161" height="38" rx="10" fill="#0F172A" stroke="#222F43" stroke-width="1.5"/>
+      <text x="864.5" y="276">kubelet</text>
+      <rect x="955" y="252" width="161" height="38" rx="10" fill="#0F172A" stroke="#222F43" stroke-width="1.5"/>
+      <text x="1035.5" y="276">kube-proxy</text>
+      <rect x="784" y="300" width="161" height="38" rx="10" fill="#0F172A" stroke="#222F43" stroke-width="1.5"/>
+      <text x="864.5" y="324">containerd</text>
+      <rect x="955" y="300" width="161" height="38" rx="10" fill="#0F172A" stroke="#222F43" stroke-width="1.5"/>
+      <text x="1035.5" y="324">calico-node</text>
+    </g>
+    <rect x="784" y="360" width="130" height="34" rx="17" fill="#0EA5EA" fill-opacity="0.18" stroke="#1CC2E7" stroke-width="1.5"/>
+    <text x="849" y="382" fill="#1CC2E7" font-size="13" font-weight="700" text-anchor="middle">wg0 · 10.8.0.2</text>
+
+    <rect x="764" y="428" width="372" height="52" rx="14" fill="none" stroke="#66768F" stroke-width="1.5" stroke-dasharray="6 5"/>
+    <text x="950" y="459" fill="#7F92B0" font-size="13" text-anchor="middle">worker-n · 10.8.0.x — mismo patrón, escala horizontal</text>
+
+    <!-- Tunnel -->
+    <rect x="436" y="371" width="348" height="12" rx="6" fill="url(#tunnel)" opacity="0.9"/>
+    <rect x="460" y="330" width="280" height="24" fill="#0B1222"/>
+    <text x="600" y="348" fill="#1CC2E7" font-size="15" font-weight="700" text-anchor="middle">Túnel WireGuard cifrado</text>
+    <rect x="460" y="392" width="280" height="50" fill="#0B1222"/>
+    <text x="600" y="410" fill="#94A9C9" font-size="13" text-anchor="middle" font-family="monospace">10.8.0.0/24 · UDP 51820</text>
+    <text x="600" y="432" fill="#66768F" font-size="12" text-anchor="middle">API :6443 · kubelet :10250</text>
+
+    <!-- Underlay -->
+    <line x1="250" y1="500" x2="250" y2="580" stroke="#FFB067" stroke-width="2" stroke-dasharray="4 4"/>
+    <line x1="950" y1="500" x2="950" y2="580" stroke="#FFB067" stroke-width="2" stroke-dasharray="4 4"/>
+    <text x="262" y="546" fill="#94A9C9" font-size="12">wlan0 · IP estática</text>
+    <text x="962" y="546" fill="#94A9C9" font-size="12">vNIC · IP estática</text>
+    <rect x="40" y="580" width="1120" height="60" rx="14" fill="#FFB067" fill-opacity="0.08" stroke="#FFB067" stroke-opacity="0.6" stroke-width="1.5"/>
+    <text x="600" y="606" fill="#FFB067" font-size="15" font-weight="700" text-anchor="middle">Underlay · LAN doméstica 192.168.100.0/24</text>
+    <text x="600" y="626" fill="#94A9C9" font-size="12" text-anchor="middle">Router Wi-Fi · el tráfico de Kubernetes nunca viaja en claro por esta red</text>
+  </g>
+</svg>

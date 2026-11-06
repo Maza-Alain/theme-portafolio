@@ -1,0 +1,171 @@
+//- Entrada de portafolio: Clúster Kubernetes híbrido (Raspberry Pi + VMware + WireGuard)
+- const imgBase = 'assets/imgs/page/portfolio/k8s-raspberry/'
+
+.case-study
+    //- Encabezado
+    .row.mt-50.align-items-end
+        .col-lg-10.m-auto.text-center
+            h2.color-linear.mb-20.wow.animate__animated.animate__fadeIn Clúster Kubernetes híbrido sobre Raspberry Pi y WireGuard
+            p.text-xl.color-gray-500.cs-lead.wow.animate__animated.animate__fadeIn
+                | Un laboratorio on-premise donde el control plane vive en una Raspberry Pi 5 (ARM64), los workers en máquinas virtuales RHEL (x86_64) y todo el tráfico entre nodos viaja por una VPN WireGuard construida a mano.
+
+    .row.mt-40.mb-40
+        .col-12
+            img.bdrd16.wow.animate__animated.animate__fadeIn(src= imgBase + 'portada.svg', alt="Clúster Kubernetes híbrido ARM64 + x86_64")
+
+    //- Cifras
+    .cs-stats.mb-50.wow.animate__animated.animate__fadeIn
+        -
+            const stats = [
+                { value: '2 arquitecturas', label: 'ARM64 y x86_64 en el mismo clúster' },
+                { value: '4 capas de red', label: 'Underlay, VPN, pods y services sin solapamiento' },
+                { value: 'kubeadm', label: 'Kubernetes v1.30 instalado desde cero, sin distribuciones' },
+                { value: '100% on-prem', label: 'Sin proveedor cloud que abstraiga la infraestructura' },
+            ]
+        each s in stats
+            .cs-stat.bg-gray-850.border-gray-800
+                h3.color-white= s.value
+                p.color-gray-500.text-sm= s.label
+
+    .row
+        .col-lg-8
+            .content-detail.border-gray-800
+
+                //- Contexto
+                h3.color-white.mb-30.wow.animate__animated.animate__fadeIn El reto
+                p.text-lg.color-gray-500.wow.animate__animated.animate__fadeIn
+                    | Quería entender Kubernetes por debajo de la abstracción: qué pasa con la red, el runtime y el sistema operativo cuando no hay un proveedor cloud resolviéndolo. Para salir de lo convencional elegí una Raspberry Pi 5 como nodo principal, lo que añadió dos frentes extra: hardware ARM con sus propias restricciones y administración de redes Linux en un entorno doméstico.
+                p.text-lg.color-gray-500.wow.animate__animated.animate__fadeIn
+                    | El resultado es un laboratorio permanente que sirve como plataforma para estudiar y desplegar nuevas tecnologías.
+
+                //- Arquitectura
+                h3.color-white.mt-50.mb-30.wow.animate__animated.animate__fadeIn Arquitectura
+                p.text-lg.color-gray-500.wow.animate__animated.animate__fadeIn
+                    | El clúster combina dos mundos: un control plane en hardware de bajo consumo y workers virtualizados en VMware. Ambos comparten la LAN doméstica, pero Kubernetes nunca la usa directamente: cada nodo se anuncia con su IP dentro del túnel WireGuard y el API server solo escucha en esa interfaz.
+                figure.cs-figure.wow.animate__animated.animate__fadeIn
+                    a(href= imgBase + 'topologia.svg', target='_blank', rel='noopener')
+                        img(src= imgBase + 'topologia.svg', alt="Topología del clúster: Raspberry Pi 5 y workers RHEL unidos por WireGuard")
+                    figcaption.text-sm.color-gray-700 Topología física y lógica del clúster.
+
+                //- Red
+                h3.color-white.mt-50.mb-30.wow.animate__animated.animate__fadeIn Diseño de red en capas
+                p.text-lg.color-gray-500.wow.animate__animated.animate__fadeIn
+                    | La mayor parte del trabajo estuvo en la red. Definí cuatro rangos independientes y me aseguré de que ninguno se solapara con otro, porque un solo traslape entre la red de pods y la LAN bastaba para que el enrutamiento fallara de forma silenciosa.
+                figure.cs-figure.wow.animate__animated.animate__fadeIn
+                    a(href= imgBase + 'capas-red.svg', target='_blank', rel='noopener')
+                        img(src= imgBase + 'capas-red.svg', alt="Capas de red del clúster: services, pods, overlay WireGuard y underlay")
+                    figcaption.text-sm.color-gray-700 Cada capa tiene un rango propio y un responsable distinto.
+
+                h3.color-white.mt-50.mb-30.wow.animate__animated.animate__fadeIn ¿Cómo viaja un paquete entre pods?
+                p.text-lg.color-gray-500.wow.animate__animated.animate__fadeIn
+                    | Cuando un pod en un worker habla con otro en el master, Calico encapsula el paquete en VXLAN, WireGuard lo cifra y la LAN solo transporta tráfico UDP opaco. Del otro lado se deshace el proceso en orden inverso. Los pods no saben nada de esto: solo ven direcciones de la red de pods.
+                figure.cs-figure.wow.animate__animated.animate__fadeIn
+                    a(href= imgBase + 'flujo-paquete.svg', target='_blank', rel='noopener')
+                        img(src= imgBase + 'flujo-paquete.svg', alt="Flujo y encapsulamiento de un paquete entre pods en nodos distintos")
+                    figcaption.text-sm.color-gray-700 Doble encapsulamiento: VXLAN dentro de WireGuard.
+
+                //- Decisiones
+                h3.color-white.mt-50.mb-30.wow.animate__animated.animate__fadeIn Decisiones de diseño
+                -
+                    const decisions = [
+                        {
+                            title: 'VPN WireGuard aunque los nodos compartan LAN',
+                            why: 'Aprender a construir y operar una VPN on-prem, cifrar el plano de control y dejar el diseño listo para sumar nodos fuera de la red local.',
+                            cost: 'Una capa más de enrutamiento que depurar: rutas de Services, IP anunciada por kubelet y alcance de metrics-server.'
+                        },
+                        {
+                            title: 'API server ligado a la interfaz de la VPN',
+                            why: 'kubelet, kubectl y los componentes del clúster solo existen dentro del túnel; nada del plano de control queda expuesto a la LAN.',
+                            cost: 'Si wg0 cae, el clúster pierde su plano de control. La VPN se vuelve una dependencia crítica.'
+                        },
+                        {
+                            title: 'El control plane también ejecuta pods',
+                            why: 'Aprovechar el hardware limitado del laboratorio retirando el taint del control plane.',
+                            cost: 'No es una práctica para producción; es reversible restaurando el taint.'
+                        },
+                        {
+                            title: 'containerd con cgroups de systemd y Calico en VXLAN',
+                            why: 'kubelet y el runtime comparten el mismo gestor de cgroups; VXLAN funciona de forma transparente sobre el túnel.',
+                            cost: 'Más overhead por paquete al encapsular dos veces.'
+                        },
+                    ]
+                .cs-grid-2
+                    each d, i in decisions
+                        .cs-card.bg-gray-850.border-gray-800.wow.animate__animated.animate__fadeIn
+                            span.cs-num= '0' + (i + 1)
+                            h5.color-white= d.title
+                            span.cs-label.color-gray-700 Por qué
+                            p.color-gray-500= d.why
+                            span.cs-label.color-gray-700 Costo
+                            p.color-gray-500= d.cost
+
+                //- Retos
+                h3.color-white.mt-50.mb-30.wow.animate__animated.animate__fadeIn Problemas reales y cómo los resolví
+                -
+                    const challenges = [
+                        {
+                            title: 'Apagones y fallos de disco',
+                            cause: 'La Pi 5 es sensible a caídas de voltaje y la alimentaba desde una extensión en una instalación con bajones esporádicos.',
+                            fix: 'UPS HAT X1200 con baterías 18650 y almacenamiento en SSD en lugar de memoria microSD.'
+                        },
+                        {
+                            title: 'Nodos que no se veían por Wi-Fi',
+                            cause: 'El band-steering del router asignaba a los equipos bandas distintas, aislándolos en capa 2.',
+                            fix: 'Diagnosticar el aislamiento y asegurar que todos los nodos compartieran la misma banda.'
+                        },
+                        {
+                            title: 'IPs de pods que chocaban con la LAN',
+                            cause: 'El IPPool por defecto de Calico (192.168.0.0/16) se solapaba con la red doméstica.',
+                            fix: 'Nuevo IPPool 10.244.0.0/16 en VXLAN, retiro del anterior y alineación del clusterCIDR de kube-proxy.'
+                        },
+                        {
+                            title: 'logs y exec fallaban hacia los workers',
+                            cause: 'kubelet se anunciaba con su IP de la LAN y el API server intentaba alcanzarlo fuera del túnel.',
+                            fix: 'Fijar la IP de WireGuard como node-ip de cada worker y habilitar el puerto de kubelet hacia el túnel.'
+                        },
+                        {
+                            title: 'Services inaccesibles desde los workers',
+                            cause: 'El rango de Services no tenía ruta a través del túnel.',
+                            fix: 'Ruta persistente hacia 10.96.0.0/12 vía wg0, gestionada por NetworkManager para sobrevivir reinicios.'
+                        },
+                        {
+                            title: 'kubectl top sin métricas',
+                            cause: 'metrics-server corría en la red de pods y no tenía ruta hacia los kubelets en las IPs de la VPN.',
+                            fix: 'Ejecutarlo con la red del host, de modo que hereda la interfaz WireGuard del nodo.'
+                        },
+                    ]
+                .cs-grid-2
+                    each c in challenges
+                        .cs-card.bg-gray-850.border-gray-800.wow.animate__animated.animate__fadeIn
+                            h5.color-white= c.title
+                            span.cs-label.color-gray-700 Causa raíz
+                            p.color-gray-500= c.cause
+                            span.cs-label.color-gray-700 Solución
+                            p.color-gray-500= c.fix
+
+                //- Uso y aprendizajes
+                h3.color-white.mt-50.mb-30.wow.animate__animated.animate__fadeIn Qué corre hoy en el clúster
+                p.text-lg.color-gray-500.wow.animate__animated.animate__fadeIn
+                    | El clúster es mi plataforma de práctica: ahí despliego Apache Airflow, Jenkins vía Helm y metrics-server, y lo uso para trabajar escenarios de RBAC, autoescalado, almacenamiento persistente y observabilidad.
+
+                h3.color-white.mt-50.mb-30.wow.animate__animated.animate__fadeIn Aprendizajes
+                ul.cs-list.text-lg.color-gray-500.wow.animate__animated.animate__fadeIn
+                    li Kubernetes delega la red al CNI: entender esa frontera es la mitad de depurar un clúster.
+                    li Planear los rangos de IP antes de instalar ahorra horas; un solapamiento falla en silencio.
+                    li Cada capa de abstracción que agregas (como la VPN) tiene que reflejarse en kubelet, rutas y firewall.
+                    li En on-prem el hardware importa: energía, almacenamiento y temperatura son parte de la arquitectura.
+
+                h3.color-white.mt-50.mb-30.wow.animate__animated.animate__fadeIn Evolución
+                p.text-lg.color-gray-500.wow.animate__animated.animate__fadeIn
+                    | Con lo aprendido aquí construí una segunda versión del laboratorio en Hetzner Cloud (1 control plane + 2 workers) sin capa de VPN, para poder estudiar desde cualquier lugar sin encender el equipo local. La versión on-prem sigue siendo mi referencia para entender qué resuelve cada capa.
+
+            .box-tags.wow.animate__animated.animate__fadeIn
+                a.btn.btn-tags.bg-gray-850.border-gray-800.mr-10.hover-up(href='#') #Kubernetes
+                a.btn.btn-tags.bg-gray-850.border-gray-800.mr-10.hover-up(href='#') #Networking
+                a.btn.btn-tags.bg-gray-850.border-gray-800.mr-10.hover-up(href='#') #WireGuard
+                a.btn.btn-tags.bg-gray-850.border-gray-800.mr-10.hover-up(href='#') #OnPrem
+                a.btn.btn-tags.bg-gray-850.border-gray-800.hover-up(href='#') #Homelab
+
+        .col-lg-4
+            .sidebar
+                include ../../components/sidebar/project_info_k8s_raspberry.pug
