@@ -5776,7 +5776,7 @@ iframe.google-map {
     width: 16.66%;
   }
   .top-deals .box-top-deals .top-deals-right,
-.top-deals .box-top-deals .top-deals-left {
+  .top-deals .box-top-deals .top-deals-left {
     width: 100%;
   }
   .top-deals .card-grid-inner .image-box {
@@ -5956,9 +5956,9 @@ iframe.google-map {
     margin-top: 15px;
   }
   .head-wishlist .item-wishlist .wishlist-price,
-.head-wishlist .item-wishlist .wishlist-status,
-.head-wishlist .item-wishlist .wishlist-action,
-.head-wishlist .item-wishlist .wishlist-remove {
+  .head-wishlist .item-wishlist .wishlist-status,
+  .head-wishlist .item-wishlist .wishlist-action,
+  .head-wishlist .item-wishlist .wishlist-remove {
     display: none;
   }
   .product-wishlist .product-info {
@@ -6159,7 +6159,7 @@ iframe.google-map {
     top: -20px;
   }
   .location,
-.phone {
+  .phone {
     font-size: 14px;
     line-height: 22px;
   }
@@ -6243,11 +6243,11 @@ iframe.google-map {
     padding: 5px 0 0px 0px;
   }
   .swiper-button-next,
-.swiper-button-prev {
+  .swiper-button-prev {
     display: none;
   }
   .swiper-button-next-style-2,
-.swiper-button-prev-style-2 {
+  .swiper-button-prev-style-2 {
     display: block;
   }
   .header .main-header .header-left .header-shop {
@@ -6421,7 +6421,7 @@ iframe.google-map {
     padding-bottom: 190px;
   }
   .block-drone,
-.block-samsung {
+  .block-samsung {
     padding-right: 35px;
   }
   .header-bottom .dropdown-right {
