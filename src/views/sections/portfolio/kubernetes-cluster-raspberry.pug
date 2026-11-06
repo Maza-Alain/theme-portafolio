@@ -1,60 +1,121 @@
+- var imgDir = 'assets/imgs/page/portfolio/raspberry-k8s/'
+
 .row.mt-50.align-items-end
     .col-lg-8.m-auto.text-center
-        h2.color-linear Cluster de kubernetes con raspberry pi
+        h2.color-linear Clúster de Kubernetes con Raspberry Pi
+        p.text-lg.color-gray-500.mt-20
+            | Un laboratorio on‑premise donde Kubernetes, redes Linux y seguridad dejan de estar abstraídos por la nube.
 
 .row.mt-30.mb-50
     .swiper-container.swiper-group-2
         .swiper-wrapper.wow.animate__animated.animate__fadeIn
+            //- Fotos del hardware: Raspberry en su case con la UPS HAT, el SSD, el host VMware, etc.
+            //- Coloca tus fotos en src/assets/imgs/page/portfolio/raspberry-k8s/ con estos nombres.
             -
                 const sliders = [
-                    {
-                        image: 'assets/imgs/page/portfolio/portfolio-1.png',
-                    },
-                    {
-                        image: 'assets/imgs/page/portfolio/portfolio-1-2.png',
-                    },
-                    {
-                        image: 'assets/imgs/page/portfolio/portfolio-1-3.png',
-                    },
-                    {
-                        image: 'assets/imgs/page/portfolio/portfolio-1-1.png',
-                    },
+                    { image: imgDir + 'foto-1.jpg', alt: 'Raspberry Pi 5 con UPS HAT X1200' },
+                    { image: imgDir + 'foto-2.jpg', alt: 'Raspberry Pi 5 en su case con SSD externo' },
+                    { image: imgDir + 'foto-3.jpg', alt: 'kubectl get nodes mostrando el clúster en Ready' },
+                    { image: imgDir + 'foto-4.jpg', alt: 'kubectl top nodes con metrics-server' },
                 ]
             each slider in sliders
                 .swiper-slide
                     .image-detail.mb-30
-                        img.bdrd16(src= slider.image, alt="Genz")
+                        img.bdrd16(src= slider.image, alt= slider.alt)
         .swiper-pagination
+
 .row
     .col-lg-8
         .content-detail.border-gray-800
-            h3.color-white.mb-30.wow.animate__animated.animate__fadeIn
-                | Project Details
-            p.text-lg.color-gray-500.wow.animate__animated.animate__fadeIn
-                | Thirty there & time wear across days, make inside on these you. Can young a really, roses blog small of song their dreamy life pretty? Because really duo living to noteworthy bloom bell. Transform clean daydreaming cute twenty process rooms cool. White white dreamy dramatically place everything although. Place out apartment afternoon whimsical kinder, little romantic joy we flowers handmade. Thirty she a studio of she whimsical projects, afternoon effect going an floated maybe.
-            p.text-lg.color-gray-500.wow.animate__animated.animate__fadeIn
-                | Tortor placerat bibendum consequat sapien, facilisi facilisi pellentesque morbi. Id consectetur ut vitae a massa a. Lacus ut bibendum sollicitudin fusce sociis mi. Dictum volutpat praesent ornare accumsan elit venenatis. Congue sodales nunc quis ultricies odio porta. Egestas mauris placerat leo phasellus ut sit.
-            .row.mt-50.wow.animate__animated.animate__fadeIn
-                .col-lg-6.gallery-left
-                    img.img-bdrd-16.mb-30(src="assets/imgs/page/portfolio/portfolio-2.png", alt="Genz")
-                .col-lg-6.gallery-right
-                    img.img-bdrd-16.mb-20(src="assets/imgs/page/portfolio/portfolio-3.png", alt="Genz")
-                    img.img-bdrd-16(src="assets/imgs/page/portfolio/portfolio-4.png", alt="Genz")
-            p.text-center.text-lg.color-gray-500.wow.animate__animated.animate__fadeIn The brand identity
 
-            h3.color-white.mt-50.mb-30.wow.animate__animated.animate__fadeIn Hire me
-            p.text-lg.color-gray-500.wow.animate__animated.animate__fadeIn Thirty there & time wear across days, make inside on these you. Can young a really, roses blog small of song their dreamy life pretty? Because really duo living to noteworthy bloom bell. Transform clean daydreaming cute twenty process rooms cool. White white dreamy dramatically place everything although. Place out apartment afternoon whimsical kinder, little romantic joy we flowers handmade. Thirty she a studio of she whimsical projects, afternoon effect going an floated maybe.
+            //- ===== Por qué =====
+            h3.color-white.mb-30.wow.animate__animated.animate__fadeIn
+                | Por qué construí este clúster
+            p.text-lg.color-gray-500.wow.animate__animated.animate__fadeIn
+                | En la nube, Kubernetes llega casi resuelto: el proveedor se encarga de la red, del balanceo, del almacenamiento y de la seguridad del plano de control. Yo quería ver qué pasa debajo de esa capa. Este proyecto nació de la curiosidad por entender cómo se comporta un clúster cuando la infraestructura es mía, desde el voltaje que alimenta al nodo hasta la ruta que sigue cada paquete.
+            p.text-lg.color-gray-500.wow.animate__animated.animate__fadeIn
+                | Para salir de lo convencional, usé una #[strong.color-white Raspberry Pi 5] como nodo master y máquinas virtuales #[strong.color-white Red Hat] en VMware como workers. Eso me dejó un clúster de arquitectura mixta (ARM64 + x86_64) y me obligó a resolver redes Linux a mano. Hoy es mi laboratorio permanente: ahí practico para la certificación CKAD y monto los proyectos que vienen.
+
+            //- ===== Arquitectura =====
+            h3.color-white.mt-50.mb-30.wow.animate__animated.animate__fadeIn
+                | Arquitectura
+            p.text-lg.color-gray-500.wow.animate__animated.animate__fadeIn
+                | El clúster se levantó con #[strong.color-white kubeadm (v1.30)] y #[strong.color-white containerd] como runtime, con cgroups gestionados por systemd. La Raspberry corre todo el plano de control (API server, etcd, scheduler y controller‑manager). Como es un laboratorio, también le permití ejecutar cargas de trabajo para aprovechar su hardware. Los workers se unen con #[em kubeadm join] y la red de pods la resuelve #[strong.color-white Calico].
+            p.text-lg.color-gray-500.wow.animate__animated.animate__fadeIn
+                | La decisión que define el diseño: #[strong.color-white los nodos no se hablan por la LAN, sino a través de un túnel WireGuard]. El API server se anuncia y escucha únicamente en su IP de la VPN (10.8.0.1), y cada kubelet se registra con su IP de WireGuard. Así, todo el tráfico del plano de control y entre pods viaja cifrado.
+            .mt-30.mb-50.wow.animate__animated.animate__fadeIn
+                img.img-bdrd-16.w-100(src=imgDir + '01-arquitectura.svg', alt="Diagrama de arquitectura: Raspberry Pi master y workers RHEL unidos por WireGuard")
+                p.text-center.text-md.color-gray-700.mt-15 Vista general: control plane en ARM, workers en VMware y un túnel cifrado entre ellos.
+
+            p.text-lg.color-gray-500.wow.animate__animated.animate__fadeIn
+                | Siendo honesto: todos los equipos están en la misma red doméstica, así que la VPN no era necesaria. La agregué a propósito para aprender WireGuard y operar una VPN on‑premise. Ahora es justo lo que me permitiría sumar nodos que estén detrás de otro router o en otra ubicación sin rediseñar nada.
+
+            //- ===== Hardware =====
+            h3.color-white.mt-50.mb-30.wow.animate__animated.animate__fadeIn
+                | El reto físico
+            p.text-lg.color-gray-500.wow.animate__animated.animate__fadeIn
+                | Vengo del software, así que el hardware fue la primera lección. La Pi 5 es sensible al bajo voltaje y en mi departamento hay bajones de luz: los apagones repentinos llegaron a dañar el disco. Lo resolví con una #[strong.color-white UPS HAT X1200] con baterías 18650. Cambié la memoria del sistema por un #[strong.color-white SSD], que es más confiable en lecturas y escrituras, y usé un disipador metálico porque este modelo se calienta. También tuve que habilitar los cgroups de memoria en el arranque (#[em cmdline.txt]), algo que en un servidor x86 normalmente ya viene listo.
+
+            //- ===== Redes =====
+            h3.color-white.mt-50.mb-30.wow.animate__animated.animate__fadeIn
+                | Diseño de red: cuatro capas
+            p.text-lg.color-gray-500.wow.animate__animated.animate__fadeIn
+                | Kubernetes no implementa la red de pods: se la delega a un CNI. En este clúster conviven cuatro redes, cada una con su propio rango, y entender cómo se apilan fue el corazón del proyecto:
+            ul.text-lg.color-gray-500.mb-30.wow.animate__animated.animate__fadeIn
+                li #[strong.color-white Underlay (192.168.100.0/24):] el Wi‑Fi doméstico. Lo configuré por terminal con nmcli, con IP estática para que el nodo siempre sea alcanzable.
+                li #[strong.color-white Overlay WireGuard (10.8.0.0/24):] la red troncal entre nodos. Es la InternalIP de cada uno.
+                li #[strong.color-white Red de pods (10.244.0.0/16):] un IPPool de Calico en modo VXLAN. Cada pod recibe una IP única y se comunica con los demás sin NAT.
+                li #[strong.color-white Red de services (10.96.0.0/12):] IPs virtuales que kube-proxy traduce con iptables.
+            .mt-30.mb-50.wow.animate__animated.animate__fadeIn
+                img.img-bdrd-16.w-100(src=imgDir + '02-capas-de-red.svg', alt="Las cuatro redes del clúster y el traslape de Calico con la LAN")
+                p.text-center.text-md.color-gray-700.mt-15 Rangos sin traslape y el problema que me obligó a rediseñar el IPPool.
+
+            p.text-lg.color-gray-500.wow.animate__animated.animate__fadeIn
+                | El resultado es un doble encapsulamiento: Calico envuelve el paquete del pod en VXLAN y WireGuard lo vuelve a envolver y lo cifra. En la LAN solo se ve tráfico UDP cifrado hacia el puerto 51820.
+            .mt-30.mb-50.wow.animate__animated.animate__fadeIn
+                img.img-bdrd-16.w-100(src=imgDir + '03-flujo-paquete.svg', alt="Flujo de un paquete de pod a pod a través de VXLAN y WireGuard")
+                p.text-center.text-md.color-gray-700.mt-15 Recorrido de un paquete entre pods de nodos distintos.
+
+            //- ===== Problemas =====
+            h3.color-white.mt-50.mb-30.wow.animate__animated.animate__fadeIn
+                | Problemas que tuve que resolver
+            p.text-lg.color-gray-500.wow.animate__animated.animate__fadeIn
+                | Casi todo lo que aprendí salió de algo que no funcionaba:
+            ul.text-lg.color-gray-500.mb-30.wow.animate__animated.animate__fadeIn
+                li #[strong.color-white Traslape de rangos.] El IPPool por defecto de Calico (192.168.0.0/16) contenía a mi LAN. Creé un pool nuevo en 10.244.0.0/16, deshabilité el anterior y alineé el clusterCIDR de kube-proxy.
+                li #[strong.color-white El API server no veía a los workers.] Al pedir logs, intentaba conectarse a la IP de la LAN del worker. Registré cada kubelet con #[em --node-ip] en su IP de WireGuard y abrí el 10250 solo donde hacía falta.
+                li #[strong.color-white Services inalcanzables desde los workers.] Agregué una ruta persistente de 10.96.0.0/12 por wg0 hacia el master, administrada con NetworkManager para que sobreviva a reinicios.
+                li #[strong.color-white metrics-server sin métricas.] Desde el host el kubelet respondía, pero el pod no tenía ruta hacia la VPN. Lo ejecuté con #[em hostNetwork] para que usara la red del nodo, y con eso empezó a funcionar #[em kubectl top].
+
+            //- ===== Seguridad =====
+            h3.color-white.mt-50.mb-30.wow.animate__animated.animate__fadeIn
+                | Seguridad y configuración
+            p.text-lg.color-gray-500.wow.animate__animated.animate__fadeIn
+                | La seguridad la pensé en capas. Para el #[strong.color-white acceso], SSH solo con llave ed25519 y root sin login por contraseña. En el #[strong.color-white perímetro], firewalld deja expuesto en la zona pública únicamente lo necesario (SSH, el puerto de WireGuard y el del API server), y la interfaz wg0 va en la zona trusted, porque lo que llega por ahí ya se autenticó con llave pública. En el #[strong.color-white plano de control], el API server solo escucha en la IP del túnel y cada peer de WireGuard está limitado a su propia IP.
+            .mt-30.mb-50.wow.animate__animated.animate__fadeIn
+                img.img-bdrd-16.w-100(src=imgDir + '04-seguridad.svg', alt="Capas de seguridad del clúster y atajos de laboratorio")
+                p.text-center.text-md.color-gray-700.mt-15 Controles por capa y los atajos que tomé a sabiendas.
+            p.text-lg.color-gray-500.wow.animate__animated.animate__fadeIn
+                | También documenté los atajos que tomé por ser un laboratorio: trabajar como root, SELinux en permissive, pods en el control plane y TLS sin verificar en metrics-server. Ninguno iría a producción, y para cada uno tengo clara la alternativa correcta. Saber dónde está esa línea me parece tan importante como hacer que funcione.
+
+            //- ===== Cierre =====
+            h3.color-white.mt-50.mb-30.wow.animate__animated.animate__fadeIn
+                | Qué me llevo
+            p.text-lg.color-gray-500.wow.animate__animated.animate__fadeIn
+                | Este clúster me dio la intuición que la nube esconde: por qué un CIDR mal elegido rompe la red, cómo se conecta el kubelet con el API server, qué significa que un CNI encapsule tráfico y cómo se apila una VPN debajo de todo eso. Lo siguiente es sumar nodos en otras redes, ahora sí aprovechando WireGuard, y montar sobre esta base observabilidad y pipelines de datos.
+
         .box-tags.wow.animate__animated.animate__fadeIn
-            a.btn.btn-tags.bg-gray-850.border-gray-800.mr-10.hover-up(href='blog-archive.html') #Nature
-            a.btn.btn-tags.bg-gray-850.border-gray-800.mr-10.hover-up(href='blog-archive.html') #Beauty
-            a.btn.btn-tags.bg-gray-850.border-gray-800.mr-10.hover-up(href='blog-archive.html') #Travel Tips
-            a.btn.btn-tags.bg-gray-850.border-gray-800.hover-up(href='blog-archive.html') #House
+            a.btn.btn-tags.bg-gray-850.border-gray-800.mr-10.hover-up(href='#') #Kubernetes
+            a.btn.btn-tags.bg-gray-850.border-gray-800.mr-10.hover-up(href='#') #WireGuard
+            a.btn.btn-tags.bg-gray-850.border-gray-800.mr-10.hover-up(href='#') #Calico
+            a.btn.btn-tags.bg-gray-850.border-gray-800.mr-10.hover-up(href='#') #RedesLinux
+            a.btn.btn-tags.bg-gray-850.border-gray-800.hover-up(href='#') #OnPremise
     .col-lg-4
         .sidebar
-            include ../../components/sidebar/project_infomation.pug
+            include ../../components/sidebar/project_info_raspberry_k8s.pug
             .d-inline-block.pt-10.wow.animate__animated.animate__fadeIn
                 .d-flex.align-item-center
-                    h6.d-inline-block.color-gray-500.mr-10 Share
+                    h6.d-inline-block.color-gray-500.mr-10 Compartir
                     a.icon-media.icon-fb(href='#')
                     a.icon-media.icon-tw(href='#')
                     a.icon-media.icon-printest(href='#')
